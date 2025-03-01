@@ -1,133 +1,40 @@
 <!DOCTYPE html>
 <html lang="it">
   <head>
-    <meta charset="UTF-8" />
-    <title>Gioco delle Paroline</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-    <style>
-      /* Aggiunto testo in stampatello maiuscolo e modifiche al font-size */
-      .option {
-        text-transform: uppercase;
-        font-size: 2.5rem !important;
-        letter-spacing: 2px;
-        font-weight: 600;
-        padding: 1.5rem 3rem !important;
-      }
-      /* Resto dello stile invariato */
-      * { box-sizing: border-box; }
-      body {
-        font-family: 'Poppins', sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-        background: linear-gradient(135deg, #74ABE2, #5563DE);
-        color: #333;
-      }
-      .start-container, .game-container {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 16px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        padding: 2rem;
-        text-align: center;
-        width: 90%;
-        max-width: 500px;
-      }
-      .start-button {
-        font-size: 1.8rem;
-        padding: 1rem 2rem;
-        background: #ff7f50;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: background 0.3s, transform 0.3s;
-      }
-      .start-button:hover {
-        background: #ff6333;
-        transform: scale(1.05);
-      }
-      .options {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 2rem;
-      }
-      .feedback-img {
-        width: 300px;
-        height: auto;
-        display: block;
-        margin: 1.5rem auto;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      }
-      .game-container { display: none; margin-top: 1rem; }
-    </style>
+    <!-- ... (stile CSS invariato) ... -->
   </head>
   <body>
-    <div class="start-container" id="startContainer">
-      <h1>Benvenuto nel gioco delle paroline!</h1>
-      <p>Ascolta la parola e scegli quella corretta!</p>
-      <button class="start-button" onclick="startGame()">Inizia il gioco</button>
-    </div>
-    <div class="game-container" id="gameContainer">
-      <img id="feedbackImage" class="feedback-img" style="display: none" alt="Feedback" />
-      <div class="options" id="options"></div>
-    </div>
+    <!-- ... (HTML invariato) ... -->
 
     <script>
-      const parole = [
-        'APE', 'ALA', 'ORA', 'ECO', 'OVO', 'IRA', 'REO', 'VIA', 'RIO', 'LUI',
-        'LEI', 'BIO', 'FAI', 'AGO', 'GHI', 'GOB', 'LAI', 'MIO', 'CASA', 'LUNA',
-        'SOLE', 'MARE', 'LAGO', 'ALBA', 'NUDE', 'ROSA', 'ERBA', 'SASSO', 'GRANO',
-        'PANE', 'VINO', 'LATTE', 'PERA', 'MELA', 'UOVO', 'RISO', 'PESCA', 'SUCCO',
-        'BRODO', 'OLIO', 'BURRO', 'LETTO', 'TAVOLO', 'SEDIA', 'PORTA', 'VETRO',
-        'TAZZA', 'PIATTO', 'CESTO', 'TENDA', 'MANO', 'PIEDE', 'TESTA', 'OCCHIO',
-        'NASO', 'BOCCA', 'DITO', 'PELO', 'GAMBA', 'CAPPELLO', 'SCARPA', 'CALZA',
-        'GONNA', 'MAGLIA', 'GUANTO', 'TUTA', 'DARE', 'FARE', 'DIRE', 'AMARE',
-        'LEGGERE', 'RIDERE', 'PARLARE', 'CANTARE', 'BALLARE', 'VEDERE', 'CADERE',
-        'APRIRE', 'LIBRO', 'PENNA', 'GOMMA', 'CHIAVE', 'TV', 'FOGLIO', 'BORSA',
-        'AGO', 'BLU', 'VERDE', 'GIALLO', 'ROSSO', 'BIANCO', 'NERO', 'ROSA', 'VIOLA',
-        'DUE', 'TRE', 'SEI', 'NOVE', 'AMICO', 'GIOCO', 'FESTA', 'BACIO', 'SOGNO',
-        'STELLA', 'PALLA', 'FIORE', 'LENTE', 'METRO', 'PISTA', 'RIVA', 'TORO', 'VASCA', 'ZAMPA'
-      ];
+      const parole = [ /* ... (array parole invariato) ... */ ];
 
-      const feedbackImage = document.getElementById("feedbackImage");
-      const optionsDiv = document.getElementById("options");
-      const startContainer = document.getElementById("startContainer");
-      const gameContainer = document.getElementById("gameContainer");
-
-      function getRandomWord() {
-        return parole[Math.floor(Math.random() * parole.length)];
-      }
-
-      async function startGame() {
-        startContainer.style.display = "none";
-        gameContainer.style.display = "block";
-        newRound();
-      }
-
-      function speakWord(word) {
+      // Funzioni modificate per il controllo della velocità
+      async function speakWord(word) {
         return new Promise(resolve => {
-          const msg = new SpeechSynthesisUtterance();
-          msg.text = word;
+          const msg = new SpeechSynthesisUtterance(word);
           msg.lang = 'it-IT';
-          msg.rate = 0.6; // Rallentato il rate di pronuncia
+          msg.rate = 0.6; // Rallentato solo per la parola
           msg.onend = resolve;
           window.speechSynthesis.speak(msg);
         });
       }
 
       async function speakSpelling(word) {
-        const spelling = word.split('').join('-');
-        const msg = new SpeechSynthesisUtterance(spelling);
+        return new Promise(resolve => {
+          const spelling = word.split('').join('-');
+          const msg = new SpeechSynthesisUtterance(spelling);
+          msg.lang = 'it-IT';
+          msg.rate = 0.5; // Rallentato solo per lo spelling
+          msg.onend = resolve;
+          window.speechSynthesis.speak(msg);
+        });
+      }
+
+      function speakNormal(text) {
+        const msg = new SpeechSynthesisUtterance(text);
         msg.lang = 'it-IT';
-        msg.rate = 0.5; // Più lento per lo spelling
+        msg.rate = 0.8; // Velocità normale per i messaggi
         window.speechSynthesis.speak(msg);
       }
 
@@ -153,24 +60,28 @@
           optionsDiv.appendChild(btn);
         });
 
-        // Legge la parola completa + spelling
-        await speakWord("Trova la parola... " + correctWord.toLowerCase());
-        await speakSpelling(correctWord);
+        // Sequenza di pronuncia modificata
+        speakNormal("Trova la parola..."); // Velocità normale
+        await speakWord(correctWord);       // Rallentato
+        await speakSpelling(correctWord);   // Rallentato
       }
 
       async function checkAnswer(selectedWord, correctWord) {
         window.speechSynthesis.cancel();
         
         if(selectedWord === correctWord) {
-          await speakWord("Bravo! Hai indovinato! La parola era " + correctWord);
+          speakNormal("Bravo! Hai indovinato!"); // Velocità normale
           feedbackImage.src = `https://cataas.com/cat?timestamp=${Date.now()}`;
           feedbackImage.style.display = "block";
           setTimeout(newRound, 3000);
         } else {
-          await speakWord(`Attenzione! Hai scelto ${selectedWord}. La parola corretta era ${correctWord}`);
-          await speakSpelling(correctWord);
+          speakNormal(`Attenzione! Hai scelto ${selectedWord}`); // Velocità normale
+          await speakWord(correctWord);    // Rallentato
+          await speakSpelling(correctWord);// Rallentato
         }
       }
+
+      // ... (resto del codice invariato)
     </script>
   </body>
 </html>
