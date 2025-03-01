@@ -7,9 +7,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
     <style>
-      * {
-        box-sizing: border-box;
+      /* Aggiunto testo in stampatello maiuscolo e modifiche al font-size */
+      .option {
+        text-transform: uppercase;
+        font-size: 2.5rem !important;
+        letter-spacing: 2px;
+        font-weight: 600;
+        padding: 1.5rem 3rem !important;
       }
+      /* Resto dello stile invariato */
+      * { box-sizing: border-box; }
       body {
         font-family: 'Poppins', sans-serif;
         display: flex;
@@ -51,22 +58,6 @@
         flex-wrap: wrap;
         margin-top: 2rem;
       }
-      .option {
-        background: #ffffff;
-        border: 3px solid #ff7f50;
-        padding: 1rem 2rem;
-        font-size: 1.5rem;
-        cursor: pointer;
-        border-radius: 12px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        min-width: 150px;
-        word-wrap: break-word;
-        text-align: center;
-      }
-      .option:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      }
       .feedback-img {
         width: 300px;
         height: auto;
@@ -75,10 +66,7 @@
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       }
-      .game-container {
-        display: none;
-        margin-top: 1rem;
-      }
+      .game-container { display: none; margin-top: 1rem; }
     </style>
   </head>
   <body>
@@ -93,57 +81,22 @@
     </div>
 
     <script>
-      // Lista di parole italiane con 4 lettere e due sillabe
-
       const parole = [
-  // 3 lettere (CVC o VCV)
-  'ape', 'ala', 'ora', 'eco', 'ovo', 'ira', 'ala', 'reo', 'via', 'rio',
-  'lui', 'lei', 'zoo', 'bio', 'fai', 'ago', 'ghi', 'gob', 'lai', 'mio',
-  
-  // 4 lettere - Natura
-  'casa', 'luna', 'sole', 'mare', 'lago', 'alba', 'nube', 'fiore', 'prato', 'rosa',
-  'erba', 'monte', 'fiume', 'sasso', 'terra', 'grano', 'frutto', 'tronco', 'foglia', 'pianta',
-  
-  // Animali
-  'gatto', 'cane', 'orso', 'lupo', 'rana', 'pesce', 'topo', 'falco', 'cavallo', 'pecora',
-  'ape', 'formica', 'tigre', 'lepre', 'lucertola', 'gallina', 'pulcino', 'coccinella', 'scimmia', 'delfino',
-  
-  // Cibo
-  'pane', 'vino', 'latte', 'formaggio', 'pera', 'mela', 'uovo', 'riso', 'pasta', 'carne',
-  'pesca', 'succo', 'torta', 'brodo', 'fagioli', 'olio', 'zucca', 'polenta', 'fetta', 'burro',
-  
-  // Casa
-  'letto', 'tavolo', 'sedia', 'porta', 'vetro', 'tazza', 'forno', 'piatto', 'cucchiaio', 'bicchiere',
-  'cesto', 'lampada', 'specchio', 'tenda', 'coperchio', 'scrivania', 'mensola', 'cuscino', 'tovaglia', 'scopa',
-  
-  // Corpo
-  'mano', 'piede', 'testa', 'occhio', 'naso', 'bocca', 'dito', 'pelo', 'unghia', 'gamba',
-  'braccio', 'fronte', 'orecchio', 'labbra', 'collo', 'petto', 'schiena', 'ginocchio', 'ciglia', 'sopracciglio',
-  
-  // Vestiti
-  'cappello', 'scarpa', 'calza', 'gonna', 'camicia', 'pantaloni', 'cintura', 'giacca', 'maglia', 'cravatta',
-  'cappotto', 'sciarpa', 'guanto', 'tuta', 'stivale', 'berretto', 'grembiule', 'pigiama', 'reggiseno', 'costume',
-  
-  // Azioni
-  'dare', 'fare', 'dire', 'amare', 'leggere', 'scrivere', 'correre', 'ridere', 'parlare', 'cantare',
-  'ballare', 'nuotare', 'dormire', 'mangiare', 'bere', 'vedere', 'sentire', 'cadere', 'aprire', 'chiudere',
-  
-  // Oggetti
-  'libro', 'penna', 'quaderno', 'matita', 'gomma', 'righello', 'zaino', 'chiave', 'orologio', 'telefono',
-  'radio', 'computer', 'tv', 'foglio', 'borsa', 'occhiali', 'martello', 'chiodo', 'forbici', 'ago',
-  
-  // Colori
-  'blu', 'verde', 'giallo', 'rosso', 'bianco', 'nero', 'rosa', 'viola', 'arancione', 'grigio',
-  
-  // Numeri (in lettere)
-  'due', 'tre', 'sei', 'nove', 'dieci', 'cento', 'mille', 
-  
-  // Altro
-  'amico', 'gioco', 'scuola', 'maestro', 'regalo', 'festa', 'musica', 'disegno', 'colore', 'sorriso',
-  'bacio', 'abbraccio', 'sogno', 'stella', 'viaggio', 'lettera', 'parco', 'palla', 'macchina', 'bicicletta'
-];
+        'APE', 'ALA', 'ORA', 'ECO', 'OVO', 'IRA', 'REO', 'VIA', 'RIO', 'LUI',
+        'LEI', 'BIO', 'FAI', 'AGO', 'GHI', 'GOB', 'LAI', 'MIO', 'CASA', 'LUNA',
+        'SOLE', 'MARE', 'LAGO', 'ALBA', 'NUDE', 'ROSA', 'ERBA', 'SASSO', 'GRANO',
+        'PANE', 'VINO', 'LATTE', 'PERA', 'MELA', 'UOVO', 'RISO', 'PESCA', 'SUCCO',
+        'BRODO', 'OLIO', 'BURRO', 'LETTO', 'TAVOLO', 'SEDIA', 'PORTA', 'VETRO',
+        'TAZZA', 'PIATTO', 'CESTO', 'TENDA', 'MANO', 'PIEDE', 'TESTA', 'OCCHIO',
+        'NASO', 'BOCCA', 'DITO', 'PELO', 'GAMBA', 'CAPPELLO', 'SCARPA', 'CALZA',
+        'GONNA', 'MAGLIA', 'GUANTO', 'TUTA', 'DARE', 'FARE', 'DIRE', 'AMARE',
+        'LEGGERE', 'RIDERE', 'PARLARE', 'CANTARE', 'BALLARE', 'VEDERE', 'CADERE',
+        'APRIRE', 'LIBRO', 'PENNA', 'GOMMA', 'CHIAVE', 'TV', 'FOGLIO', 'BORSA',
+        'AGO', 'BLU', 'VERDE', 'GIALLO', 'ROSSO', 'BIANCO', 'NERO', 'ROSA', 'VIOLA',
+        'DUE', 'TRE', 'SEI', 'NOVE', 'AMICO', 'GIOCO', 'FESTA', 'BACIO', 'SOGNO',
+        'STELLA', 'PALLA', 'FIORE', 'LENTE', 'METRO', 'PISTA', 'RIVA', 'TORO', 'VASCA', 'ZAMPA'
+      ];
 
-      const audioResult = true;
       const feedbackImage = document.getElementById("feedbackImage");
       const optionsDiv = document.getElementById("options");
       const startContainer = document.getElementById("startContainer");
@@ -156,56 +109,67 @@
       async function startGame() {
         startContainer.style.display = "none";
         gameContainer.style.display = "block";
-        await newRound();
+        newRound();
+      }
+
+      function speakWord(word) {
+        return new Promise(resolve => {
+          const msg = new SpeechSynthesisUtterance();
+          msg.text = word;
+          msg.lang = 'it-IT';
+          msg.rate = 0.6; // Rallentato il rate di pronuncia
+          msg.onend = resolve;
+          window.speechSynthesis.speak(msg);
+        });
+      }
+
+      async function speakSpelling(word) {
+        const spelling = word.split('').join('-');
+        const msg = new SpeechSynthesisUtterance(spelling);
+        msg.lang = 'it-IT';
+        msg.rate = 0.5; // Più lento per lo spelling
+        window.speechSynthesis.speak(msg);
       }
 
       async function newRound() {
+        window.speechSynthesis.cancel();
         feedbackImage.style.display = "none";
         
         const correctWord = getRandomWord();
         let wrongWord = getRandomWord();
         
-        // Assicura parole diverse
         while(wrongWord === correctWord) {
           wrongWord = getRandomWord();
         }
 
-        // Mescola le opzioni
-        const options = [correctWord, wrongWord];
-        options.sort(() => Math.random() - 0.5);
+        const options = [correctWord, wrongWord].sort(() => Math.random() - 0.5);
 
-        // Genera i pulsanti
         optionsDiv.innerHTML = '';
         options.forEach(word => {
           const btn = document.createElement("div");
           btn.classList.add("option");
-          btn.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+          btn.textContent = word;
           btn.onclick = () => checkAnswer(word, correctWord);
           optionsDiv.appendChild(btn);
         });
 
-        // Leggi la parola corretta
-        if(audioResult) {
-          speakStr(`Trova la parola: ${correctWord}`);
-        }
+        // Legge la parola completa + spelling
+        await speakWord("Trova la parola... " + correctWord.toLowerCase());
+        await speakSpelling(correctWord);
       }
 
-      function checkAnswer(selectedWord, correctWord) {
+      async function checkAnswer(selectedWord, correctWord) {
+        window.speechSynthesis.cancel();
+        
         if(selectedWord === correctWord) {
-          speakStr("Bravo, hai vinto! 🎉");
+          await speakWord("Bravo! Hai indovinato! La parola era " + correctWord);
           feedbackImage.src = `https://cataas.com/cat?timestamp=${Date.now()}`;
           feedbackImage.style.display = "block";
-          setTimeout(newRound, 2000);
+          setTimeout(newRound, 3000);
         } else {
-          speakStr(`Ops! La parola giusta era: ${correctWord}`);
+          await speakWord(`Attenzione! Hai scelto ${selectedWord}. La parola corretta era ${correctWord}`);
+          await speakSpelling(correctWord);
         }
-      }
-
-      function speakStr(text) {
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'it-IT';
-        msg.rate = 0.9;
-        window.speechSynthesis.speak(msg);
       }
     </script>
   </body>
