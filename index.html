@@ -2,7 +2,7 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <title>Gioco delle Parole</title>
+    <title>Gioco delle Paroline</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -83,7 +83,7 @@
   </head>
   <body>
     <div class="start-container" id="startContainer">
-      <h1>Benvenuto nel gioco delle parole!</h1>
+      <h1>Benvenuto nel gioco delle paroline!</h1>
       <p>Ascolta la parola e scegli quella corretta!</p>
       <button class="start-button" onclick="startGame()">Inizia il gioco</button>
     </div>
@@ -93,21 +93,64 @@
     </div>
 
     <script>
+      // Lista di parole italiane con 4 lettere e due sillabe
+
+      const parole = [
+  // 3 lettere (CVC o VCV)
+  'ape', 'ala', 'ora', 'eco', 'ovo', 'ira', 'ala', 'reo', 'via', 'rio',
+  'lui', 'lei', 'zoo', 'bio', 'fai', 'ago', 'ghi', 'gob', 'lai', 'mio',
+  
+  // 4 lettere - Natura
+  'casa', 'luna', 'sole', 'mare', 'lago', 'alba', 'nube', 'fiore', 'prato', 'rosa',
+  'erba', 'monte', 'fiume', 'sasso', 'terra', 'grano', 'frutto', 'tronco', 'foglia', 'pianta',
+  
+  // Animali
+  'gatto', 'cane', 'orso', 'lupo', 'rana', 'pesce', 'topo', 'falco', 'cavallo', 'pecora',
+  'ape', 'formica', 'tigre', 'lepre', 'lucertola', 'gallina', 'pulcino', 'coccinella', 'scimmia', 'delfino',
+  
+  // Cibo
+  'pane', 'vino', 'latte', 'formaggio', 'pera', 'mela', 'uovo', 'riso', 'pasta', 'carne',
+  'pesca', 'succo', 'torta', 'brodo', 'fagioli', 'olio', 'zucca', 'polenta', 'fetta', 'burro',
+  
+  // Casa
+  'letto', 'tavolo', 'sedia', 'porta', 'vetro', 'tazza', 'forno', 'piatto', 'cucchiaio', 'bicchiere',
+  'cesto', 'lampada', 'specchio', 'tenda', 'coperchio', 'scrivania', 'mensola', 'cuscino', 'tovaglia', 'scopa',
+  
+  // Corpo
+  'mano', 'piede', 'testa', 'occhio', 'naso', 'bocca', 'dito', 'pelo', 'unghia', 'gamba',
+  'braccio', 'fronte', 'orecchio', 'labbra', 'collo', 'petto', 'schiena', 'ginocchio', 'ciglia', 'sopracciglio',
+  
+  // Vestiti
+  'cappello', 'scarpa', 'calza', 'gonna', 'camicia', 'pantaloni', 'cintura', 'giacca', 'maglia', 'cravatta',
+  'cappotto', 'sciarpa', 'guanto', 'tuta', 'stivale', 'berretto', 'grembiule', 'pigiama', 'reggiseno', 'costume',
+  
+  // Azioni
+  'dare', 'fare', 'dire', 'amare', 'leggere', 'scrivere', 'correre', 'ridere', 'parlare', 'cantare',
+  'ballare', 'nuotare', 'dormire', 'mangiare', 'bere', 'vedere', 'sentire', 'cadere', 'aprire', 'chiudere',
+  
+  // Oggetti
+  'libro', 'penna', 'quaderno', 'matita', 'gomma', 'righello', 'zaino', 'chiave', 'orologio', 'telefono',
+  'radio', 'computer', 'tv', 'foglio', 'borsa', 'occhiali', 'martello', 'chiodo', 'forbici', 'ago',
+  
+  // Colori
+  'blu', 'verde', 'giallo', 'rosso', 'bianco', 'nero', 'rosa', 'viola', 'arancione', 'grigio',
+  
+  // Numeri (in lettere)
+  'due', 'tre', 'sei', 'nove', 'dieci', 'cento', 'mille', 
+  
+  // Altro
+  'amico', 'gioco', 'scuola', 'maestro', 'regalo', 'festa', 'musica', 'disegno', 'colore', 'sorriso',
+  'bacio', 'abbraccio', 'sogno', 'stella', 'viaggio', 'lettera', 'parco', 'palla', 'macchina', 'bicicletta'
+];
+
       const audioResult = true;
       const feedbackImage = document.getElementById("feedbackImage");
       const optionsDiv = document.getElementById("options");
       const startContainer = document.getElementById("startContainer");
       const gameContainer = document.getElementById("gameContainer");
 
-      async function fetchRandomWord() {
-        try {
-          const response = await fetch('https://random-word-api.herokuapp.com/word?number=1');
-          const data = await response.json();
-          return data[0].toLowerCase();
-        } catch (error) {
-          console.error('Errore nel fetch:', error);
-          return 'computer'; // Fallback word
-        }
+      function getRandomWord() {
+        return parole[Math.floor(Math.random() * parole.length)];
       }
 
       async function startGame() {
@@ -119,12 +162,12 @@
       async function newRound() {
         feedbackImage.style.display = "none";
         
-        const correctWord = await fetchRandomWord();
-        let wrongWord = await fetchRandomWord();
+        const correctWord = getRandomWord();
+        let wrongWord = getRandomWord();
         
         // Assicura parole diverse
         while(wrongWord === correctWord) {
-          wrongWord = await fetchRandomWord();
+          wrongWord = getRandomWord();
         }
 
         // Mescola le opzioni
@@ -149,19 +192,19 @@
 
       function checkAnswer(selectedWord, correctWord) {
         if(selectedWord === correctWord) {
-          speakStr("Bravo, hai vinto!");
+          speakStr("Bravo, hai vinto! 🎉");
           feedbackImage.src = `https://cataas.com/cat?timestamp=${Date.now()}`;
           feedbackImage.style.display = "block";
           setTimeout(newRound, 2000);
         } else {
-          speakStr(`No, hai sbagliato! La parola corretta era: ${correctWord}`);
+          speakStr(`Ops! La parola giusta era: ${correctWord}`);
         }
       }
 
       function speakStr(text) {
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = 'it-IT';
-        msg.rate = 0.8;
+        msg.rate = 0.9;
         window.speechSynthesis.speak(msg);
       }
     </script>
