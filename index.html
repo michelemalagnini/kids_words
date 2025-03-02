@@ -1,87 +1,295 @@
 <!DOCTYPE html>
 <html lang="it">
   <head>
-    <!-- ... (stile CSS invariato) ... -->
+    <meta charset="UTF-8" />
+    <title>Gioco delle Paroline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+ <style>
+   * {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+   }
+
+   body {
+     font-family: 'Poppins', sans-serif;
+     background: linear-gradient(135deg, #a8edea, #fed6e3);
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     padding: 2rem;
+     min-height: 100vh;
+     color: #2b2d42;
+   }
+
+   h1 {
+     font-size: 2rem;
+     font-weight: 700;
+     margin-bottom: 1rem;
+     color: #2b2d42;
+   }
+
+   p {
+     font-size: 1.2rem;
+     color: #4a4e69;
+     margin-bottom: 2rem;
+   }
+
+   .start-container,
+   .game-container {
+     background: #ffffff;
+     border-radius: 24px;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+     padding: 2.5rem 2rem;
+     text-align: center;
+     width: 100%;
+     max-width: 480px;
+   }
+
+   .start-button {
+     font-size: 1.5rem;
+     padding: 1rem 2.5rem;
+     background: #ff6b6b;
+     color: #ffffff;
+     border: none;
+     border-radius: 50px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+   }
+
+   .start-button:hover {
+     background: #ff5252;
+     transform: translateY(-3px);
+     box-shadow: 0 8px 20px rgba(255, 82, 82, 0.5);
+   }
+
+   .options {
+     display: flex;
+     gap: 1rem;
+     justify-content: center;
+     flex-wrap: wrap;
+     margin-top: 2rem;
+   }
+
+   .option {
+     background: #4d96ff;
+     color: #ffffff;
+     padding: 1.2rem 2rem;
+     font-size: 1.8rem;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 1.5px;
+     border-radius: 16px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     box-shadow: 0 4px 10px rgba(77, 150, 255, 0.3);
+   }
+
+   .option:hover {
+     background: #256dff;
+     transform: translateY(-2px);
+     box-shadow: 0 6px 15px rgba(37, 109, 255, 0.4);
+   }
+
+   .feedback-img {
+     width: 100%;
+     max-width: 280px;
+     height: auto;
+     margin: 2rem auto;
+     border-radius: 16px;
+     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+   }
+
+   .game-container {
+     display: none;
+     margin-top: 1.5rem;
+   }
+
+   /* Media Queries */
+   @media (max-width: 768px) {
+     h1 {
+       font-size: 1.7rem;
+     }
+     p {
+       font-size: 1rem;
+     }
+     .start-button {
+       font-size: 1.3rem;
+       padding: 0.8rem 2rem;
+     }
+     .option {
+       font-size: 1.5rem;
+       padding: 1rem 1.5rem;
+     }
+   }
+
+   @media (max-width: 480px) {
+     h1 {
+       font-size: 1.5rem;
+     }
+     p {
+       font-size: 0.9rem;
+     }
+     .start-button {
+       font-size: 1.1rem;
+       padding: 0.7rem 1.5rem;
+     }
+     .option {
+       font-size: 1.3rem;
+       padding: 0.8rem 1.2rem;
+     }
+   }
+ </style>
+ 
   </head>
   <body>
-    <!-- ... (HTML invariato) ... -->
+    <div class="start-container" id="startContainer">
+      <h1>Benvenuto nel gioco delle paroline!</h1>
+      <p>Ascolta la parola e scegli quella corretta!</p>
+      <button class="start-button" onclick="startGame()">Inizia il gioco</button>
+    </div>
+    <div class="game-container" id="gameContainer">
+      <img id="feedbackImage" class="feedback-img" style="display: none" alt="Feedback" />
+      <div class="options" id="options"></div>
+    </div>
 
     <script>
-      const parole = [ /* ... (array parole invariato) ... */ ];
+        const parole = [
+          // 3 lettere (CVC o VCV)
+          'APE', 'ALA', 'ORA', 'ECO', 'OVO', 'IRA', 'REO', 'VIA', 'RIO', 'LUI',
+          'LEI', 'AGO', 'GHI', 'LAI', 'MIO', 'ZOO', 'BAI', 'CAI', 'DAI', 'FAI',
+          'GEO', 'MIA', 'NEO', 'PIO', 'REI', 'SUO', 'TUA', 'VAI', 'ZUO', 'BOA',
+  
+          // 4 lettere - Due sillabe
+          'CASA', 'LUNA', 'SOLE', 'MARE', 'LAGO', 'ALBA', 'ROSA', 'ERBA', 'SASSO',
+          'PANE', 'VINO', 'RISO', 'UOVO', 'PERA', 'MELA', 'LATTE', 'BRODO', 'OLIO',
+          'LETTO', 'PORTA', 'TAZZA', 'PIATTO', 'SEDIA', 'VETRO', 'TENDA', 'MANO',
+          'PIEDE', 'TESTA', 'OCCHIO', 'NASO', 'BOCCA', 'DITO', 'PELO', 'GAMBA',
+          'SCARPA', 'CALZA', 'GONNA', 'MAGLIA', 'GUANTO', 'TUTA', 'LIBRO', 'PENNA',
+          'GOMMA', 'TV', 'AGO', 'BLU', 'VERDE', 'ROSSO', 'BIANCO', 'NERO', 'ROSA',
+          'VIOLA', 'DUE', 'TRE', 'SEI', 'NOVE', 'AMICO', 'GIOCO', 'FESTA', 'BACIO',
+          'SOGNO', 'STELLA', 'PALLA', 'FIORE', 'METRO', 'PISTA', 'RIVA', 'TORO',
+          'VASCA', 'ZAMPA', 'CAFFE', 'CANE', 'GATTO', 'RANA', 'ORSO', 'LUPO', 'PESCE',
+          'UCCELLO', 'FORMICA', 'FOGLIA', 'PRATO', 'MONTE', 'FIUME', 'SALE', 'ZUCCA',
+          'CARNE', 'SUCCO', 'TÈ', 'PELLE', 'OSSO', 'NODO', 'VELA', 'RETO', 'PUNTO',
+          'RETE', 'CODA', 'PIOGGIA', 'NEVE', 'GHIACCIO', 'VENTO', 'SALE', 'RISO',
+          'RAME', 'SACCO', 'POZZO', 'POLLA', 'PELLE', 'PESTO', 'RADIO', 'FONDO',
+          'SENSO', 'TETTO', 'FESSO', 'CORDA', 'PALMO', 'GESSO', 'FONTE', 'PISTA',
+          'POSTO', 'MASSO', 'SALTO', 'VOLTO', 'TARDO', 'PORTO', 'CASTA', 'FAVO',
+          'GUSCIO', 'FUSO', 'BOSCO', 'TRENO', 'SGUARDO', 'GRU', 'BRUCO', 'TRONCO',
+          'CRETA', 'PRESA', 'TASSO', 'FREGIO', 'DRAGO', 'SGUARDO', 'TRAMA', 'FRATE',
+          'SCUDO', 'BRACCIO', 'FRESCO', 'SVELTO', 'PEGNO', 'TIGRE', 'SFOGO', 'SFERA',
+          'SGUARDO', 'DRITTO', 'CREDO', 'SPIGA', 'SPAZIO', 'SPINA', 'SPADA', 'SCALA',
+          'SCARTO', 'SCUDO', 'SFRATTO', 'SFOGO', 'SGOMITO', 'SGUARDO', 'SVELTO'
+        ];
 
-      // Funzioni modificate per il controllo della velocità
+        // Verifica lunghezza array
+        console.log(parole.length); // 200 elementi
+      
+      
+
+      const feedbackImage = document.getElementById("feedbackImage");
+      const optionsDiv = document.getElementById("options");
+      const startContainer = document.getElementById("startContainer");
+      const gameContainer = document.getElementById("gameContainer");
+
+      function getRandomWord() {
+        return parole[Math.floor(Math.random() * parole.length)];
+      }
+
+      async function startGame() {
+        startContainer.style.display = "none";
+        gameContainer.style.display = "block";
+        newRound();
+      }
+
       async function speakWord(word) {
-        return new Promise(resolve => {
-          const msg = new SpeechSynthesisUtterance(word);
-          msg.lang = 'it-IT';
-          msg.rate = 0.6; // Rallentato solo per la parola
-          msg.onend = resolve;
-          window.speechSynthesis.speak(msg);
-        });
-      }
+            return new Promise(resolve => {
+              const msg = new SpeechSynthesisUtterance(word);
+              msg.lang = 'it-IT';
+              msg.rate = 0.6; // Rallentato solo per la parola
+              msg.onend = resolve;
+              window.speechSynthesis.speak(msg);
+            });
+          }
 
-      async function speakSpelling(word) {
-        return new Promise(resolve => {
-          const spelling = word.split('').join('-');
-          const msg = new SpeechSynthesisUtterance(spelling);
-          msg.lang = 'it-IT';
-          msg.rate = 0.5; // Rallentato solo per lo spelling
-          msg.onend = resolve;
-          window.speechSynthesis.speak(msg);
-        });
-      }
+          async function speakSpelling(word) {
+            const letters = word.split('');
+  
+            for (let i = 0; i < letters.length; i++) {
+              const letter = letters[i];
+              await new Promise(resolve => {
+                const msg = new SpeechSynthesisUtterance(letter);
+                msg.lang = 'it-IT';
+                msg.rate = 0.5;
+      
+                // Aggiunta pausa dopo ogni lettera (eccetto l'ultima)
+                msg.onend = () => {
+                  if(i < letters.length - 1) {
+                    setTimeout(resolve, 300); // 300ms di pausa tra le lettere
+                  } else {
+                    resolve();
+                  }
+                };
+      
+                window.speechSynthesis.speak(msg);
+              });
+            }
+          }         
+               
+               function speakNormal(text) {
+                      const msg = new SpeechSynthesisUtterance(text);
+                      msg.lang = 'it-IT';
+                      msg.rate = 0.8; // Velocità normale per i messaggi
+                      window.speechSynthesis.speak(msg);
+                    }
 
-      function speakNormal(text) {
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'it-IT';
-        msg.rate = 0.8; // Velocità normale per i messaggi
-        window.speechSynthesis.speak(msg);
-      }
-
-      async function newRound() {
-        window.speechSynthesis.cancel();
-        feedbackImage.style.display = "none";
+                    async function newRound() {
+                         window.speechSynthesis.cancel();
+                         feedbackImage.style.display = "none";
         
-        const correctWord = getRandomWord();
-        let wrongWord = getRandomWord();
+                         const correctWord = getRandomWord();
+                         let wrongWord = getRandomWord();
         
-        while(wrongWord === correctWord) {
-          wrongWord = getRandomWord();
-        }
+                         while(wrongWord === correctWord) {
+                           wrongWord = getRandomWord();
+                         }
 
-        const options = [correctWord, wrongWord].sort(() => Math.random() - 0.5);
+                         const options = [correctWord, wrongWord].sort(() => Math.random() - 0.5);
 
-        optionsDiv.innerHTML = '';
-        options.forEach(word => {
-          const btn = document.createElement("div");
-          btn.classList.add("option");
-          btn.textContent = word;
-          btn.onclick = () => checkAnswer(word, correctWord);
-          optionsDiv.appendChild(btn);
-        });
+                         optionsDiv.innerHTML = '';
+                         options.forEach(word => {
+                           const btn = document.createElement("div");
+                           btn.classList.add("option");
+                           btn.textContent = word;
+                           btn.onclick = () => checkAnswer(word, correctWord);
+                           optionsDiv.appendChild(btn);
+                         });
 
-        // Sequenza di pronuncia modificata
-        speakNormal("Trova la parola..."); // Velocità normale
-        await speakWord(correctWord);       // Rallentato
-        await speakSpelling(correctWord);   // Rallentato
-      }
+                         // Sequenza di pronuncia modificata
+                         speakNormal("Trova la parola..."); // Velocità normale
+                         await speakWord(correctWord);       // Rallentato
+                         await speakSpelling(correctWord);   // Rallentato
+                       }
 
-      async function checkAnswer(selectedWord, correctWord) {
-        window.speechSynthesis.cancel();
+                       async function checkAnswer(selectedWord, correctWord) {
+                              window.speechSynthesis.cancel();
         
-        if(selectedWord === correctWord) {
-          speakNormal("Bravo! Hai indovinato!"); // Velocità normale
-          feedbackImage.src = `https://cataas.com/cat?timestamp=${Date.now()}`;
-          feedbackImage.style.display = "block";
-          setTimeout(newRound, 3000);
-        } else {
-          speakNormal(`Attenzione! Hai scelto ${selectedWord}`); // Velocità normale
-          await speakWord(correctWord);    // Rallentato
-          await speakSpelling(correctWord);// Rallentato
-        }
-      }
-
-      // ... (resto del codice invariato)
+                              if(selectedWord === correctWord) {
+                                speakNormal("Bravo! Hai indovinato!"); // Velocità normale
+                                feedbackImage.src = `https://cataas.com/cat?timestamp=${Date.now()}`;
+                                feedbackImage.style.display = "block";
+                                setTimeout(newRound, 3000);
+                              } else {
+                                speakNormal(`Attenzione! Hai scelto ${selectedWord}`); // Velocità normale
+                                await speakWord(correctWord);    // Rallentato
+                                await speakSpelling(correctWord);// Rallentato
+                              }
+                            }
     </script>
   </body>
 </html>
